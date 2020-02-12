@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/black-delta/kartkraft-online-authentication/platform"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -14,8 +16,8 @@ import (
 type Authentication struct {
 	Ticket   string
 	Secret   string
-	Platform Platform
-	Id       string
+	Platform platform.Platform
+	ID       string
 }
 
 // AuthenticateContext takes a context, extracts the metadata containing the authentication credentials,
@@ -35,7 +37,7 @@ func AuthenticateContext(ctx context.Context) error {
 	return fmt.Errorf("No credentials supplied")
 }
 
-// GetClientID returns the client ID from the context
+// GetIDFromContext returns the ID from the context
 func GetIDFromContext(ctx context.Context) (string, error) {
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
 
@@ -58,12 +60,12 @@ func (a *Authentication) RequireTransportSecurity() bool {
 	return true
 }
 
-// GetRequestMetaData extracts embedded metadata from the request
+// GetRequestMetadata extracts embedded metadata from the request
 func (a *Authentication) GetRequestMetadata(context.Context, ...string) (map[string]string, error) {
 	return map[string]string{
 		"ticket":   a.Ticket,
 		"secret":   a.Secret,
-		"platform": a.Platform,
-		"id":       a.Id,
+		"platform": a.Platform.String(),
+		"id":       a.ID,
 	}, nil
 }
