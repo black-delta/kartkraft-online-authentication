@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/black-delta/kartkraft-online-authentication/platform"
+	"github.com/motorsportgames/kartkraft-online-authentication/platform"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
